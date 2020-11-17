@@ -17,6 +17,19 @@ public class Contact {
     private String email;
     private String currentPlaceOfWork;
 
+    public Contact(String firstName, String lastName, String middleName, LocaleData birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.citizenship = citizenship;
+        this.familyStatus = familyStatus;
+        this.webSite = webSite;
+        this.email = email;
+        this.currentPlaceOfWork = currentPlaceOfWork;
+    }
+
     public String getFirstName() {
         return firstName;
     }
