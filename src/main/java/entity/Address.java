@@ -79,5 +79,14 @@ public class Address {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "Address{" +
+                "country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", house=" + house +
+                ", flat=" + flat +
+                '}';
+    }
 }
