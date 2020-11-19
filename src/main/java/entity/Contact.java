@@ -16,8 +16,9 @@ public class Contact {
     private String webSite;
     private String email;
     private String currentPlaceOfWork;
+    private Address address;
 
-    public Contact(String firstName, String lastName, String middleName, LocaleData birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork) {
+    public Contact(String firstName, String lastName, String middleName, LocaleData birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -28,6 +29,15 @@ public class Contact {
         this.webSite = webSite;
         this.email = email;
         this.currentPlaceOfWork = currentPlaceOfWork;
+        this.address = address;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getFirstName() {
