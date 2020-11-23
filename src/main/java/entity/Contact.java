@@ -1,15 +1,17 @@
 package entity;
 
-import sun.util.resources.LocaleData;
+
 import type.FamilyStatusType;
 import type.SexType;
+
+import java.time.LocalDate;
 
 public class Contact {
 
     private String firstName;
     private String lastName;
     private String middleName;
-    private LocaleData birthday;
+    private LocalDate birthday;
     private SexType gender;
     private String citizenship;
     private FamilyStatusType familyStatus;
@@ -18,7 +20,7 @@ public class Contact {
     private String currentPlaceOfWork;
     private Address address;
 
-    public Contact(String firstName, String lastName, String middleName, LocaleData birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork, Address address) {
+    public Contact(String firstName, String lastName, String middleName, LocalDate birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -64,11 +66,11 @@ public class Contact {
         this.middleName = middleName;
     }
 
-    public LocaleData getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocaleData birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -168,6 +170,7 @@ public class Contact {
                 ", webSite='" + webSite + '\'' +
                 ", email='" + email + '\'' +
                 ", currentPlaceOfWork='" + currentPlaceOfWork + '\'' +
+                ", address=" + address.toString() +
                 '}';
     }
 }

@@ -1,4 +1,9 @@
 package repository.dao;
 
-public class ContactDao {
+import repository.DAO;
+
+import java.sql.*;
+
+public class ContactDao implements DAO {
+
 }
