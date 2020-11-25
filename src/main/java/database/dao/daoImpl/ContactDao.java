@@ -1,4 +1,4 @@
-package database.dao;
+package database.dao.daoImpl;
 
 import database.DAO;
 import entity.Contact;
