@@ -1,6 +1,7 @@
 package entity;
 
 public class Address {
+    private Long id;
     private String country;
     private String city;
     private String street;
@@ -55,34 +56,19 @@ public class Address {
         this.flat = flat;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Address address = (Address) o;
-
-        if (country != null ? !country.equals(address.country) : address.country != null) return false;
-        if (city != null ? !city.equals(address.city) : address.city != null) return false;
-        if (street != null ? !street.equals(address.street) : address.street != null) return false;
-        if (house != null ? !house.equals(address.house) : address.house != null) return false;
-        return flat != null ? flat.equals(address.flat) : address.flat == null;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        int result = country != null ? country.hashCode() : 0;
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (house != null ? house.hashCode() : 0);
-        result = 31 * result + (flat != null ? flat.hashCode() : 0);
-        return result;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Address{" +
-                "country='" + country + '\'' +
+                "id=" + id +
+                ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
                 ", house=" + house +

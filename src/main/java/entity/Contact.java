@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public class Contact {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String middleName;
@@ -123,44 +124,19 @@ public class Contact {
         this.currentPlaceOfWork = currentPlaceOfWork;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Contact contact = (Contact) o;
-
-        if (firstName != null ? !firstName.equals(contact.firstName) : contact.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(contact.lastName) : contact.lastName != null) return false;
-        if (middleName != null ? !middleName.equals(contact.middleName) : contact.middleName != null) return false;
-        if (birthday != null ? !birthday.equals(contact.birthday) : contact.birthday != null) return false;
-        if (gender != contact.gender) return false;
-        if (citizenship != null ? !citizenship.equals(contact.citizenship) : contact.citizenship != null) return false;
-        if (familyStatus != contact.familyStatus) return false;
-        if (webSite != null ? !webSite.equals(contact.webSite) : contact.webSite != null) return false;
-        if (email != null ? !email.equals(contact.email) : contact.email != null) return false;
-        return currentPlaceOfWork != null ? currentPlaceOfWork.equals(contact.currentPlaceOfWork) : contact.currentPlaceOfWork == null;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (citizenship != null ? citizenship.hashCode() : 0);
-        result = 31 * result + (familyStatus != null ? familyStatus.hashCode() : 0);
-        result = 31 * result + (webSite != null ? webSite.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (currentPlaceOfWork != null ? currentPlaceOfWork.hashCode() : 0);
-        return result;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Contact{" +
-                "firstName='" + firstName + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", birthday=" + birthday +
