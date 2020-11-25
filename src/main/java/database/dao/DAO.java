@@ -1,4 +1,4 @@
-package database;
+package database.dao;
 
 import entity.Contact;
 
