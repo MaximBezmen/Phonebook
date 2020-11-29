@@ -1,6 +1,6 @@
 package database.dao.daoImpl;
 
-import database.DAO;
+import database.dao.DAO;
 import entity.Contact;
 
 import java.sql.Connection;
@@ -37,7 +37,6 @@ public class ContactDao implements DAO {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             }
         }
 
