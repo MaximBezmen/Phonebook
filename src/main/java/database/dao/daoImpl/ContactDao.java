@@ -1,9 +1,13 @@
 package database.dao.daoImpl;
 
 import database.dao.DAO;
+import entity.Address;
 import entity.Contact;
+import type.FamilyStatusType;
+import type.SexType;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class ContactDao implements DAO {
 
@@ -64,7 +68,53 @@ public class ContactDao implements DAO {
     }
 
 
-    public Contact read(Long id) {
-        return null;
+    public Contact read(Long contactId) {
+        Contact contact = null;
+        Long id = 0L;
+        String firstName = "null";
+        String lastName = "null";
+        String middleName = "null";
+        String birthday = "null";
+        String gender = "null";
+        String citizenship = "null";
+        String familyStatus = "null";
+        String webSite = "null";
+        String email = "null";
+        String currentPlaceOfWork = "null";
+        Long addressId = null;
+        Address address = null;
+        try (Connection connection = connect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
+            preparedStatement.setString(1, "contact");
+            preparedStatement.setLong(2, contactId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getLong(1);
+                    firstName = resultSet.getString("first_name");
+                    lastName = resultSet.getString("last_name");
+                    middleName = resultSet.getString("middle_name");
+                    birthday = resultSet.getString("birthday");
+                    gender = resultSet.getString("gender");
+                    citizenship = resultSet.getString("citizenship");
+                    familyStatus = resultSet.getString("family_status");
+                    webSite = resultSet.getString("web_site");
+                    email = resultSet.getString("email");
+                    currentPlaceOfWork = resultSet.getString("current_place_of_work");
+                    addressId = resultSet.getLong("address_id");
+
+                }
+                address = dao.read(addressId);
+                contact = new Contact(id, firstName, lastName, middleName, LocalDate.parse(birthday), SexType.valueOf(gender),
+                        citizenship, FamilyStatusType.valueOf(familyStatus), webSite, email, currentPlaceOfWork, address);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contact;
     }
 }

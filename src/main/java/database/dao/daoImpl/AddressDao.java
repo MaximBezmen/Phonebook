@@ -56,9 +56,10 @@ public class AddressDao implements DAO {
         String flat = "null";
 
         try (Connection connection = connect()) {
-            final String SELECT_SQL = "SELECT * FROM address WHERE id=?";
+
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
-            preparedStatement.setLong(1, addressId);
+            preparedStatement.setString(1,"address");
+            preparedStatement.setLong(2, addressId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
