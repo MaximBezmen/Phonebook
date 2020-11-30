@@ -12,11 +12,13 @@ public class ContactDao implements DAO {
         Long id = 0L;
 
         try (Connection connection = connect()) {
+
             final String INSERT_SQL = "INSERT INTO contact (first_name, last_name, middle_name, birthday, gender," +
                     "citizenship, family_status, web_site, email, current_place_of_work, address_id)"
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            AddressDao dao = new AddressDao();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
-    preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
             preparedStatement.setString(4, entity.getBirthday().toString());
@@ -26,15 +28,15 @@ public class ContactDao implements DAO {
             preparedStatement.setString(8, entity.getWebSite());
             preparedStatement.setString(9, entity.getEmail());
             preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
-            preparedStatement.setString(11, entity.getAddress().getId().toString());
+            preparedStatement.setString(11, dao.save(entity.getAddress()).toString());
 
             int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows>0){
-                try(ResultSet resultSet = preparedStatement.getGeneratedKeys()){
-                    if (resultSet.next()){
+            if (affectedRows > 0) {
+                try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                    if (resultSet.next()) {
                         id = resultSet.getLong(1);
                     }
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
