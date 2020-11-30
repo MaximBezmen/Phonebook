@@ -8,7 +8,8 @@ public class Address {
     private Integer house;
     private Integer flat;
 
-    public Address(String country, String city, String street, Integer house, Integer flat) {
+    public Address(Long id, String country, String city, String street, Integer house, Integer flat) {
+        this.id = id;
         this.country = country;
         this.city = city;
         this.street = street;

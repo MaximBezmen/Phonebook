@@ -2,7 +2,6 @@ package database.dao.daoImpl;
 
 import database.dao.DAO;
 import entity.Address;
-import entity.Contact;
 
 import java.sql.*;
 
@@ -23,12 +22,12 @@ public class AddressDao implements DAO {
             preparedStatement.setInt(5, entity.getFlat());
 
             int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0){
-                try(ResultSet resultSet = preparedStatement.getGeneratedKeys()){
-                    if(resultSet.next()){
-                    id = resultSet.getLong(1);
+            if (affectedRows > 0) {
+                try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                    if (resultSet.next()) {
+                        id = resultSet.getLong(1);
                     }
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
@@ -47,7 +46,38 @@ public class AddressDao implements DAO {
 
     }
 
-    public Contact read(Long id) {
-        return null;
+    public Address read(Long addressId) {
+        Address addressEntity = null;
+        long id = 0L;
+        String country = "null";
+        String city = "null";
+        String street = "null";
+        String house = "null";
+        String flat = "null";
+
+        try (Connection connection = connect()) {
+            final String SELECT_SQL = "SELECT * FROM address WHERE id=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
+            preparedStatement.setLong(1, addressId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getLong(1);
+                    country = resultSet.getString("country");
+                    city = resultSet.getString("city");
+                    street = resultSet.getString("street");
+                    house = resultSet.getString("house");
+                    flat = resultSet.getString("flat");
+                }
+                addressEntity = new Address(Long.valueOf(id), country, city, street, Integer.parseInt(house), Integer.parseInt(flat));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return addressEntity;
     }
 }
