@@ -7,6 +7,12 @@ import java.sql.*;
 
 public class ContactDao implements DAO {
 
+    private final AddressDao dao;
+
+    public ContactDao(AddressDao dao) {
+        this.dao = dao;
+    }
+
     public Long save(Contact entity) {
 
         Long id = 0L;
@@ -16,7 +22,7 @@ public class ContactDao implements DAO {
             final String INSERT_SQL = "INSERT INTO contact (first_name, last_name, middle_name, birthday, gender," +
                     "citizenship, family_status, web_site, email, current_place_of_work, address_id)"
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-            AddressDao dao = new AddressDao();
+
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
