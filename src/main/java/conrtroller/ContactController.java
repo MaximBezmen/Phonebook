@@ -1,5 +1,8 @@
 package conrtroller;
 
+import database.dao.daoImpl.AddressDao;
+import entity.Address;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +14,10 @@ import java.io.IOException;
 public class ContactController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        AddressDao dao = new AddressDao();
+        Address address = new Address("dsd", "dsds", "dsd", 1, 3);
+        Long id = dao.save(address);
+        resp.getWriter().write(id.toString());
     }
 
     @Override
