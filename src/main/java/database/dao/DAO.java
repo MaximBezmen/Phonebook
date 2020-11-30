@@ -11,11 +11,4 @@ public interface DAO {
     String USER = "postgres";
     String PASS = "mamant38";
 
-    void save(Contact entity);
-
-    void delete(Long id);
-
-    void update(Contact entity);
-
-    Contact read(Long id);
 }
