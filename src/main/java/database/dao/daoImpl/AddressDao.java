@@ -42,41 +42,57 @@ public class AddressDao implements DAO {
     }
 
 
-    public void update(Address entity) {
+    public Address update(Address entity) {
+        String UPDATE_SQL = "UPDATE address SET country=?, city=?, street=?, house=?, flat=? WHERE id=?";
 
+        try (Connection connection = connect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+            preparedStatement.setString(1, entity.getCountry());
+            preparedStatement.setString(2, entity.getCity());
+            preparedStatement.setString(3, entity.getStreet());
+            preparedStatement.setInt(4, entity.getHouse());
+            preparedStatement.setInt(5, entity.getFlat());
+            preparedStatement.setLong(6, entity.getId());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    entity.setId(resultSet.getLong(1));
+                    entity.setCountry(resultSet.getString("country"));
+                    entity.setStreet(resultSet.getString("city"));
+                    entity.setStreet(resultSet.getString("street"));
+                    entity.setHouse(Integer.parseInt(resultSet.getString("house")));
+                    entity.setFlat(Integer.parseInt(resultSet.getString("flat")));
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return entity;
     }
 
     public Address read(Long addressId) {
         String SELECT_SQL = "SELECT * FROM address WHERE id=?";
         Address addressEntity = null;
-        Long id = 0L;
-        String country = "null";
-        String city = "null";
-        String street = "null";
-        String house = "null";
-        String flat = "null";
-
-        try (Connection connection = connect()) {
+             try (Connection connection = connect()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
-            preparedStatement.setLong(1,addressId);
+            preparedStatement.setLong(1, addressId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    id = resultSet.getLong(1);
-                    country = resultSet.getString("country");
-                    city = resultSet.getString("city");
-                    street = resultSet.getString("street");
-                    house = resultSet.getString("house");
-                    flat = resultSet.getString("flat");
+                    addressEntity = new Address();
+                    addressEntity.setId(resultSet.getLong(1));
+                    addressEntity.setCountry(resultSet.getString("country"));
+                    addressEntity.setCity(resultSet.getString("city"));
+                    addressEntity.setStreet(resultSet.getString("street"));
+                    addressEntity.setHouse(Integer.parseInt(resultSet.getString("house")));
+                    addressEntity.setFlat(Integer.parseInt(resultSet.getString("flat")));
                 }
-                addressEntity = new Address();
-                addressEntity.setId(id);
-                addressEntity.setCountry(country);
-                addressEntity.setCity(city);
-                addressEntity.setStreet(street);
-                addressEntity.setHouse(Integer.parseInt(house));
-                addressEntity.setFlat(Integer.parseInt(flat));
 
             } catch (SQLException e) {
                 e.printStackTrace();
