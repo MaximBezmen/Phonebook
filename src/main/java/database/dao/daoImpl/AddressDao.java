@@ -47,8 +47,9 @@ public class AddressDao implements DAO {
     }
 
     public Address read(Long addressId) {
+        String SELECT_SQL = "SELECT * FROM address WHERE id=?";
         Address addressEntity = null;
-        long id = 0L;
+        Long id = 0L;
         String country = "null";
         String city = "null";
         String street = "null";
@@ -58,8 +59,7 @@ public class AddressDao implements DAO {
         try (Connection connection = connect()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
-            preparedStatement.setString(1,"address");
-            preparedStatement.setLong(2, addressId);
+            preparedStatement.setLong(1,addressId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -70,7 +70,13 @@ public class AddressDao implements DAO {
                     house = resultSet.getString("house");
                     flat = resultSet.getString("flat");
                 }
-                addressEntity = new Address(Long.valueOf(id), country, city, street, Integer.parseInt(house), Integer.parseInt(flat));
+                addressEntity = new Address();
+                addressEntity.setId(id);
+                addressEntity.setCountry(country);
+                addressEntity.setCity(city);
+                addressEntity.setStreet(street);
+                addressEntity.setHouse(Integer.parseInt(house));
+                addressEntity.setFlat(Integer.parseInt(flat));
 
             } catch (SQLException e) {
                 e.printStackTrace();

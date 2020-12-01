@@ -69,6 +69,8 @@ public class ContactDao implements DAO {
 
 
     public Contact read(Long contactId) {
+        String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
+
         Contact contact = null;
         Long id = 0L;
         String firstName = "null";
@@ -85,8 +87,7 @@ public class ContactDao implements DAO {
         Address address = null;
         try (Connection connection = connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
-            preparedStatement.setString(1, "contact");
-            preparedStatement.setLong(2, contactId);
+            preparedStatement.setLong(1, contactId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -105,9 +106,19 @@ public class ContactDao implements DAO {
 
                 }
                 address = dao.read(addressId);
-                contact = new Contact(id, firstName, lastName, middleName, LocalDate.parse(birthday), SexType.valueOf(gender),
-                        citizenship, FamilyStatusType.valueOf(familyStatus), webSite, email, currentPlaceOfWork, address);
-
+                contact = new Contact();
+                contact.setId(id);
+                contact.setFirstName(firstName);
+                contact.setLastName(lastName);
+                contact.setMiddleName(middleName);
+                contact.setBirthday(LocalDate.parse(birthday));
+                contact.setGender(SexType.valueOf(gender));
+                contact.setCitizenship(citizenship);
+                contact.setFamilyStatus(FamilyStatusType.valueOf(familyStatus));
+                contact.setWebSite(webSite);
+                contact.setEmail(email);
+                contact.setCurrentPlaceOfWork(currentPlaceOfWork);
+                contact.setAddress(address);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

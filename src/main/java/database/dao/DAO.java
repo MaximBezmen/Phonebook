@@ -15,7 +15,6 @@ public interface DAO {
     String USER = "postgres";
     String PASS = "mamant38";
 
-    String SELECT_SQL = "SELECT * FROM ? WHERE id=?";
     default Connection connect () throws SQLException {
         try {
             Class.forName(JDBC_DRIVER);

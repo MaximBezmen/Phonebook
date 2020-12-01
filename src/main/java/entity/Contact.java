@@ -21,19 +21,8 @@ public class Contact {
     private String currentPlaceOfWork;
     private Address address;
 
-    public Contact(Long id, String firstName, String lastName, String middleName, LocalDate birthday, SexType gender, String citizenship, FamilyStatusType familyStatus, String webSite, String email, String currentPlaceOfWork, Address address) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.citizenship = citizenship;
-        this.familyStatus = familyStatus;
-        this.webSite = webSite;
-        this.email = email;
-        this.currentPlaceOfWork = currentPlaceOfWork;
-        this.address = address;
+    public Contact() {
+
     }
 
     public Address getAddress() {

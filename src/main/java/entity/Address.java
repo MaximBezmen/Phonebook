@@ -8,13 +8,8 @@ public class Address {
     private Integer house;
     private Integer flat;
 
-    public Address(Long id, String country, String city, String street, Integer house, Integer flat) {
-        this.id = id;
-        this.country = country;
-        this.city = city;
-        this.street = street;
-        this.house = house;
-        this.flat = flat;
+    public Address() {
+
     }
 
     public String getCountry() {
