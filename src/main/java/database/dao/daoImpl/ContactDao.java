@@ -59,11 +59,20 @@ public class ContactDao implements DAO {
 
 
     public void delete(Long id) {
+        String DELETE_SQL = "DELETE FROM contact WHERE id=?";
+        try (Connection connection = connect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
     public void update(Contact entity) {
+
 
     }
 
