@@ -38,7 +38,8 @@ public class ContactDao implements DAO {
             preparedStatement.setString(8, entity.getWebSite());
             preparedStatement.setString(9, entity.getEmail());
             preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
-            preparedStatement.setString(11, dao.save(entity.getAddress()).toString());
+
+            preparedStatement.setRef(11, dao.getRefOnAddressId(dao.save(entity.getAddress())));
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -71,9 +72,47 @@ public class ContactDao implements DAO {
     }
 
 
-    public void update(Contact entity) {
+    public Contact update(Contact entity) {
+        String UPDATE_SQL = "UPDATE contact SET first_name=?, last_name=?, middle_name=?, birthday=?, gender=?," +
+                "citizenship=?, family_status=?, web_site=?, email=?, current_place_of_work=?, address_id=? WHERE id=?";
 
+        try (Connection connection = connect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setString(3, entity.getMiddleName());
+            preparedStatement.setString(4, entity.getBirthday().toString());
+            preparedStatement.setString(5, entity.getGender().name());
+            preparedStatement.setString(6, entity.getCitizenship());
+            preparedStatement.setString(7, entity.getFamilyStatus().name());
+            preparedStatement.setString(8, entity.getWebSite());
+            preparedStatement.setString(9, entity.getEmail());
+            preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
+            preparedStatement.setLong(11, entity.getAddress().getId());
+            preparedStatement.setLong(12, entity.getId());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    entity.setId(resultSet.getLong(1));
+                    entity.setFirstName(resultSet.getString("first_name"));
+                    entity.setLastName(resultSet.getString("last_name"));
+                    entity.setMiddleName(resultSet.getString("middle_name"));
+                    entity.setBirthday(LocalDate.parse(resultSet.getString("birthday")));
+                    entity.setGender(SexType.valueOf(resultSet.getString("gender")));
+                    entity.setCitizenship(resultSet.getString("citizenship"));
+                    entity.setFamilyStatus(FamilyStatusType.valueOf(resultSet.getString("family_status")));
+                    entity.setWebSite(resultSet.getString("web_site"));
+                    entity.setEmail(resultSet.getString("email"));
+                    entity.setCurrentPlaceOfWork(resultSet.getString("current_place_of_work"));
+                    Long addressId = resultSet.getLong("address_id");
+                    entity.setAddress(dao.read(addressId));
+                }
 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return entity;
     }
 
 
@@ -81,53 +120,32 @@ public class ContactDao implements DAO {
         String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
 
         Contact contact = null;
-        Long id = 0L;
-        String firstName = "null";
-        String lastName = "null";
-        String middleName = "null";
-        String birthday = "null";
-        String gender = "null";
-        String citizenship = "null";
-        String familyStatus = "null";
-        String webSite = "null";
-        String email = "null";
-        String currentPlaceOfWork = "null";
-        Long addressId = null;
-        Address address = null;
+
         try (Connection connection = connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
             preparedStatement.setLong(1, contactId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    id = resultSet.getLong(1);
-                    firstName = resultSet.getString("first_name");
-                    lastName = resultSet.getString("last_name");
-                    middleName = resultSet.getString("middle_name");
-                    birthday = resultSet.getString("birthday");
-                    gender = resultSet.getString("gender");
-                    citizenship = resultSet.getString("citizenship");
-                    familyStatus = resultSet.getString("family_status");
-                    webSite = resultSet.getString("web_site");
-                    email = resultSet.getString("email");
-                    currentPlaceOfWork = resultSet.getString("current_place_of_work");
-                    addressId = resultSet.getLong("address_id");
+                    contact = new Contact();
+
+                    contact.setId(resultSet.getLong(1));
+                    contact.setFirstName(resultSet.getString("first_name"));
+                    contact.setLastName(resultSet.getString("last_name"));
+                    contact.setMiddleName(resultSet.getString("middle_name"));
+                    contact.setBirthday(LocalDate.parse(resultSet.getString("birthday")));
+                    contact.setGender(SexType.valueOf(resultSet.getString("gender")));
+                    contact.setCitizenship(resultSet.getString("citizenship"));
+                    contact.setFamilyStatus(FamilyStatusType.valueOf(resultSet.getString("family_status")));
+                    contact.setWebSite(resultSet.getString("web_site"));
+                    contact.setEmail(resultSet.getString("email"));
+                    contact.setCurrentPlaceOfWork(resultSet.getString("current_place_of_work"));
+                    Long addressId = resultSet.getLong("address_id");
+                    Address address = dao.read(addressId);
+                    contact.setAddress(address);
 
                 }
-                address = dao.read(addressId);
-                contact = new Contact();
-                contact.setId(id);
-                contact.setFirstName(firstName);
-                contact.setLastName(lastName);
-                contact.setMiddleName(middleName);
-                contact.setBirthday(LocalDate.parse(birthday));
-                contact.setGender(SexType.valueOf(gender));
-                contact.setCitizenship(citizenship);
-                contact.setFamilyStatus(FamilyStatusType.valueOf(familyStatus));
-                contact.setWebSite(webSite);
-                contact.setEmail(email);
-                contact.setCurrentPlaceOfWork(currentPlaceOfWork);
-                contact.setAddress(address);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }

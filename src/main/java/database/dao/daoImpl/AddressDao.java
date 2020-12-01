@@ -36,6 +36,30 @@ public class AddressDao implements DAO {
         }
         return id;
     }
+    public Ref getRefOnAddressId(Long id) {
+
+        Ref ref = null;
+
+        try (Connection connection = connect()) {
+            final String SELECT_ID = "SELECT * FROM address WHERE id=?";
+
+
+            ResultSet resultSet = null;
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
+                preparedStatement.setLong(1, id);
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    ref = resultSet.getRef("id");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ref;
+    }
 
     public void delete(Long id) {
         String DELETE_SQL = "DELETE FROM address WHERE id=?";
