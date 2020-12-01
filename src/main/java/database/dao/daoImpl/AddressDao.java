@@ -38,7 +38,15 @@ public class AddressDao implements DAO {
     }
 
     public void delete(Long id) {
+        String DELETE_SQL = "DELETE FROM address WHERE id=?";
+        try (Connection connection = connect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -78,7 +86,7 @@ public class AddressDao implements DAO {
     public Address read(Long addressId) {
         String SELECT_SQL = "SELECT * FROM address WHERE id=?";
         Address addressEntity = null;
-             try (Connection connection = connect()) {
+        try (Connection connection = connect()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL);
             preparedStatement.setLong(1, addressId);
