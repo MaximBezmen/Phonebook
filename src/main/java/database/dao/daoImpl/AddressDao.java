@@ -31,11 +31,19 @@ public class AddressDao implements DAO {
                     e.printStackTrace();
                 }
             }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return id;
     }
+
     public Ref getRefOnAddressId(Long id) {
 
         Ref ref = null;
@@ -52,6 +60,13 @@ public class AddressDao implements DAO {
                 if (resultSet.next()) {
                     ref = resultSet.getRef("id");
                 }
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        System.out.println("SQLException for close preparedStatement.");
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -67,7 +82,13 @@ public class AddressDao implements DAO {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,7 +120,13 @@ public class AddressDao implements DAO {
                 e.printStackTrace();
             }
 
-
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -125,7 +152,13 @@ public class AddressDao implements DAO {
                     addressEntity.setHouse(Integer.parseInt(resultSet.getString("house")));
                     addressEntity.setFlat(Integer.parseInt(resultSet.getString("flat")));
                 }
-
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        System.out.println("SQLException for close preparedStatement.");
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

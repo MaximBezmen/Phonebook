@@ -29,7 +29,7 @@ public class ContactDao implements DAO {
 
             Date birthday = Date.valueOf(entity.getBirthday());
 
-           PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
@@ -53,9 +53,17 @@ public class ContactDao implements DAO {
                 }
             }
 
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return id;
     }
 
@@ -66,6 +74,13 @@ public class ContactDao implements DAO {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,7 +124,13 @@ public class ContactDao implements DAO {
                 }
 
             }
-
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("SQLException for close preparedStatement.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,7 +167,13 @@ public class ContactDao implements DAO {
                     contact.setAddress(address);
 
                 }
-
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        System.out.println("SQLException for close preparedStatement.");
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
