@@ -27,19 +27,20 @@ public class ContactDao implements DAO {
                     "citizenship, family_status, web_site, email, current_place_of_work, address_id)"
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
+            Date birthday = Date.valueOf(entity.getBirthday());
+
+           PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
-            preparedStatement.setString(4, entity.getBirthday().toString());
+            preparedStatement.setDate(4, birthday);
             preparedStatement.setString(5, entity.getGender().name());
             preparedStatement.setString(6, entity.getCitizenship());
             preparedStatement.setString(7, entity.getFamilyStatus().name());
             preparedStatement.setString(8, entity.getWebSite());
             preparedStatement.setString(9, entity.getEmail());
             preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
-
-            preparedStatement.setRef(11, dao.getRefOnAddressId(dao.save(entity.getAddress())));
+            preparedStatement.setLong(11, dao.save(entity.getAddress()));
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -75,13 +76,13 @@ public class ContactDao implements DAO {
     public Contact update(Contact entity) {
         String UPDATE_SQL = "UPDATE contact SET first_name=?, last_name=?, middle_name=?, birthday=?, gender=?," +
                 "citizenship=?, family_status=?, web_site=?, email=?, current_place_of_work=?, address_id=? WHERE id=?";
-
+        Date birthday = Date.valueOf(entity.getBirthday());
         try (Connection connection = connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2, entity.getLastName());
             preparedStatement.setString(3, entity.getMiddleName());
-            preparedStatement.setString(4, entity.getBirthday().toString());
+            preparedStatement.setDate(4, birthday);
             preparedStatement.setString(5, entity.getGender().name());
             preparedStatement.setString(6, entity.getCitizenship());
             preparedStatement.setString(7, entity.getFamilyStatus().name());
