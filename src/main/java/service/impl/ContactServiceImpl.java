@@ -3,6 +3,7 @@ package service.impl;
 import database.dao.daoImpl.ContactDao;
 import entity.Contact;
 import service.ContactService;
+import service.dto.ContactDto;
 import service.json.CustomJson;
 import service.mapper.ContactMapper;
 
@@ -24,7 +25,13 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public String saveContact(Contact e) {
-        return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactDao.save(e))));
+    public String saveContact(ContactDto contactDto) {
+
+        return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactDao.save())));
+    }
+
+    @Override
+    public String readContact(Long contactId) {
+        return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactId)));
     }
 }

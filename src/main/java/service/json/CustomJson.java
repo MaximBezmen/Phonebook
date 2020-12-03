@@ -8,7 +8,7 @@ public class CustomJson {
     public String addressToJsonForContact(AddressDto dto) {
 
         return "Address[" +
-                "id=" + dto.getId() +
+                "addressId=" + dto.getId() +
                 ", country='" + dto.getCountry() +
                 ", city='" + dto.getCity() +
                 ", street='" + dto.getStreet() +
@@ -20,7 +20,7 @@ public class CustomJson {
     public String addressDtoToJson(AddressDto dto) {
 
         return "Address{" +
-                "id=" + dto.getId() +
+                "addressId=" + dto.getId() +
                 ", country='" + dto.getCountry() +
                 ", city='" + dto.getCity() +
                 ", street='" + dto.getStreet() +
