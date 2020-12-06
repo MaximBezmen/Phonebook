@@ -4,8 +4,13 @@ import entity.Contact;
 import service.dto.ContactDto;
 
 public class ContactMapper {
+    private final AddressMapper addressMapper;
 
-   public ContactDto toDto(Contact entity) {
+    public ContactMapper() {
+        this.addressMapper = new AddressMapper();
+    }
+
+    public ContactDto toDto(Contact entity) {
         ContactDto contactDto = null;
         if (entity != null) {
             contactDto = new ContactDto();
@@ -25,5 +30,24 @@ public class ContactMapper {
         return contactDto;
     }
 
+
+    public Contact toEntity(ContactDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Contact contact = new Contact();
+        contact.setFirstName(dto.getFirstName());
+        contact.setLastName(dto.getLastName());
+        contact.setMiddleName(dto.getMiddleName());
+        contact.setBirthday(dto.getBirthday());
+        contact.setGender(dto.getGender());
+        contact.setCitizenship(dto.getCitizenship());
+        contact.setFamilyStatus(dto.getFamilyStatus());
+        contact.setWebSite(dto.getWebSite());
+        contact.setEmail(dto.getEmail());
+        contact.setCurrentPlaceOfWork(dto.getCurrentPlaceOfWork());
+        contact.setAddress(addressMapper.toEntity(dto.getAddress()));
+        return contact;
+    }
 }
 

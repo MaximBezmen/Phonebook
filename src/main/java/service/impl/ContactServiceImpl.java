@@ -27,7 +27,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public String saveContact(ContactDto contactDto) {
 
-        return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactDao.save())));
+        return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactDao.save(contactMapper.toEntity(contactDto)))));
     }
 
     @Override

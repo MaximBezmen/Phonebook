@@ -2,8 +2,6 @@ package conrtroller;
 
 import database.dao.daoImpl.AddressDao;
 import database.dao.daoImpl.ContactDao;
-import entity.Address;
-import entity.Contact;
 import service.ContactService;
 import service.CustomBodyRequest;
 import service.dto.AddressDto;
@@ -30,7 +28,7 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()),new CustomJson(),new ContactMapper());
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()),new CustomJson(),new ContactMapper(addressMapper));
     }
 
     @Override
