@@ -28,7 +28,7 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()),new CustomJson(),new ContactMapper(addressMapper));
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()),new CustomJson(),new ContactMapper());
     }
 
     @Override
