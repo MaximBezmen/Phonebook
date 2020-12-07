@@ -28,18 +28,18 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()),new CustomJson(),new ContactMapper());
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new CustomJson(), new ContactMapper());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long contactId = Long.parseLong(req.getParameter("id"));
-        resp.getWriter().write(contactService.readContact((contactId)));
+        resp.getWriter().write(contactService.getContactById((contactId)));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    Map<String,String> body = customBodyRequest.getBody(req);
+        Map<String, String> body = customBodyRequest.getBody(req);
         ContactDto contactDto = new ContactDto();
         AddressDto addressDto = new AddressDto();
         contactDto.setFirstName(body.get("firstName"));
@@ -61,17 +61,42 @@ public class ContactController extends HttpServlet {
         addressDto.setHouse(Integer.parseInt(body.get("flat")));
 
         contactDto.setAddress(addressDto);
-        contactService.saveContact(contactDto);
+        resp.getWriter().write(contactService.saveContact(contactDto));
 
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, String> body = customBodyRequest.getBody(req);
+        ContactDto contactDto = new ContactDto();
+        AddressDto addressDto = new AddressDto();
+        contactDto.setFirstName(body.get("firstName"));
+        contactDto.setLastName(body.get("lastName"));
+        contactDto.setLastName(body.get("middleName"));
+        contactDto.setBirthday(LocalDate.parse(body.get("birthday")));
+        contactDto.setGender(SexType.valueOf(body.get("gender")));
+        contactDto.setCitizenship(body.get("citizenship"));
+        contactDto.setFamilyStatus(FamilyStatusType.valueOf(body.get("familyStatus")));
+        contactDto.setWebSite(body.get("webSite"));
+        contactDto.setEmail(body.get("email"));
+        contactDto.setCurrentPlaceOfWork(body.get("currentPlaceOfWork"));
+
+        addressDto.setId(Long.parseLong(body.get("addressId")));
+        addressDto.setCountry(body.get("country"));
+        addressDto.setCity(body.get("city"));
+        addressDto.setStreet(body.get("street"));
+        addressDto.setHouse(Integer.parseInt(body.get("house")));
+        addressDto.setHouse(Integer.parseInt(body.get("flat")));
+        contactDto.setAddress(addressDto);
+
+        resp.getWriter().write(contactService.updateContact(contactDto));
 
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        Long id = Long.parseLong(req.getParameter("id"));
+        contactService.deleteContact(id);
+        resp.setStatus(200);
     }
 }

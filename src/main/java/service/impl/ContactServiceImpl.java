@@ -19,19 +19,23 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public String getContactById(Long id) {
-        Contact contactEntity = contactDao.read(id);
-        return customJson.contactToJson(contactMapper.toDto(contactEntity));
-    }
-
-    @Override
     public String saveContact(ContactDto contactDto) {
 
         return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactDao.save(contactMapper.toEntity(contactDto)))));
     }
 
     @Override
-    public String readContact(Long contactId) {
+    public String getContactById(Long contactId) {
         return customJson.contactToJson(contactMapper.toDto(contactDao.read(contactId)));
+    }
+
+    @Override
+    public String updateContact(ContactDto dto) {
+        return customJson.contactToJson(contactMapper.toDto(contactDao.update(contactDao.update(contactMapper.toEntity(dto)))));
+    }
+
+    @Override
+    public void deleteContact(Long id) {
+        contactDao.delete(id);
     }
 }
