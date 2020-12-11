@@ -1,5 +1,6 @@
 package conrtroller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import database.dao.daoImpl.AddressDao;
 import database.dao.daoImpl.ContactDao;
 import service.ContactService;
@@ -7,10 +8,7 @@ import service.CustomBodyRequest;
 import service.dto.AddressDto;
 import service.dto.ContactDto;
 import service.impl.ContactServiceImpl;
-import service.json.CustomJson;
 import service.mapper.ContactMapper;
-import type.FamilyStatusType;
-import type.SexType;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Map;
 
 @WebServlet("/")
@@ -28,7 +25,7 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new CustomJson(), new ContactMapper());
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new ContactMapper());
     }
 
     @Override
@@ -39,57 +36,23 @@ public class ContactController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, String> body = customBodyRequest.getBody(req);
-        ContactDto contactDto = new ContactDto();
-        AddressDto addressDto = new AddressDto();
-        contactDto.setFirstName(body.get("firstName"));
-        contactDto.setLastName(body.get("lastName"));
-        contactDto.setLastName(body.get("middleName"));
-        contactDto.setBirthday(LocalDate.parse(body.get("birthday")));
-        contactDto.setGender(SexType.valueOf(body.get("gender")));
-        contactDto.setCitizenship(body.get("citizenship"));
-        contactDto.setFamilyStatus(FamilyStatusType.valueOf(body.get("familyStatus")));
-        contactDto.setWebSite(body.get("webSite"));
-        contactDto.setEmail(body.get("email"));
-        contactDto.setCurrentPlaceOfWork(body.get("currentPlaceOfWork"));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = req.getReader().readLine()) != null) {
+            stringBuilder.append(line);
+        }
 
-        addressDto.setId(Long.parseLong(body.get("addressId")));
-        addressDto.setCountry(body.get("country"));
-        addressDto.setCity(body.get("city"));
-        addressDto.setStreet(body.get("street"));
-        addressDto.setHouse(Integer.parseInt(body.get("house")));
-        addressDto.setHouse(Integer.parseInt(body.get("flat")));
-
-        contactDto.setAddress(addressDto);
-        resp.getWriter().write(contactService.saveContact(contactDto));
+        ContactDto contactDto = new ObjectMapper().readValue(stringBuilder.toString(),ContactDto.class);
+        int x = 0;
+        resp.getWriter().write(new ObjectMapper().writeValueAsString(contactDto));
 
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, String> body = customBodyRequest.getBody(req);
-        ContactDto contactDto = new ContactDto();
-        AddressDto addressDto = new AddressDto();
-        contactDto.setFirstName(body.get("firstName"));
-        contactDto.setLastName(body.get("lastName"));
-        contactDto.setLastName(body.get("middleName"));
-        contactDto.setBirthday(LocalDate.parse(body.get("birthday")));
-        contactDto.setGender(SexType.valueOf(body.get("gender")));
-        contactDto.setCitizenship(body.get("citizenship"));
-        contactDto.setFamilyStatus(FamilyStatusType.valueOf(body.get("familyStatus")));
-        contactDto.setWebSite(body.get("webSite"));
-        contactDto.setEmail(body.get("email"));
-        contactDto.setCurrentPlaceOfWork(body.get("currentPlaceOfWork"));
 
-        addressDto.setId(Long.parseLong(body.get("addressId")));
-        addressDto.setCountry(body.get("country"));
-        addressDto.setCity(body.get("city"));
-        addressDto.setStreet(body.get("street"));
-        addressDto.setHouse(Integer.parseInt(body.get("house")));
-        addressDto.setHouse(Integer.parseInt(body.get("flat")));
-        contactDto.setAddress(addressDto);
 
-        resp.getWriter().write(contactService.updateContact(contactDto));
+
 
     }
 

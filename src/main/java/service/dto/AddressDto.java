@@ -1,12 +1,14 @@
 package service.dto;
 
 public class AddressDto {
+
     private Long id;
     private String country;
     private String city;
     private String street;
     private Integer house;
     private Integer flat;
+
 
     public Long getId() {
         return id;
@@ -55,5 +57,4 @@ public class AddressDto {
     public void setFlat(Integer flat) {
         this.flat = flat;
     }
-
 }

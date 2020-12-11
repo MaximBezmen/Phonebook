@@ -10,7 +10,13 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class ContactDao implements DAO {
-
+    final String UPDATE_SQL = "UPDATE contact SET first_name=?, last_name=?, middle_name=?, birthday=?, gender=?," +
+            "citizenship=?, family_status=?, web_site=?, email=?, current_place_of_work=?, address_id=? WHERE id=?";
+    final String INSERT_SQL = "INSERT INTO contact (first_name, last_name, middle_name, birthday, gender," +
+            "citizenship, family_status, web_site, email, current_place_of_work, address_id)"
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    final String DELETE_SQL = "DELETE FROM contact WHERE id=?";
+    final String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
     private final AddressDao dao;
 
     public ContactDao(AddressDao dao) {
@@ -22,11 +28,7 @@ public class ContactDao implements DAO {
         Long id = 0L;
 
         try (Connection connection = connect()) {
-
-            final String INSERT_SQL = "INSERT INTO contact (first_name, last_name, middle_name, birthday, gender," +
-                    "citizenship, family_status, web_site, email, current_place_of_work, address_id)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
+            connection.setAutoCommit(false);
             Date birthday = Date.valueOf(entity.getBirthday());
 
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -40,7 +42,7 @@ public class ContactDao implements DAO {
             preparedStatement.setString(8, entity.getWebSite());
             preparedStatement.setString(9, entity.getEmail());
             preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
-            preparedStatement.setLong(11, dao.save(entity.getAddress()));
+            preparedStatement.setLong(11, dao.save(entity.getAddress(), connection));
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -52,14 +54,9 @@ public class ContactDao implements DAO {
                     e.printStackTrace();
                 }
             }
+            connection.commit();
+            connection.setAutoCommit(true);
 
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    System.out.println("SQLException for close preparedStatement.");
-                }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +66,7 @@ public class ContactDao implements DAO {
 
 
     public void delete(Long id) {
-        String DELETE_SQL = "DELETE FROM contact WHERE id=?";
+
         try (Connection connection = connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL);
             preparedStatement.setLong(1, id);
@@ -89,8 +86,6 @@ public class ContactDao implements DAO {
 
 
     public Contact update(Contact entity) {
-        String UPDATE_SQL = "UPDATE contact SET first_name=?, last_name=?, middle_name=?, birthday=?, gender=?," +
-                "citizenship=?, family_status=?, web_site=?, email=?, current_place_of_work=?, address_id=? WHERE id=?";
         Date birthday = Date.valueOf(entity.getBirthday());
         try (Connection connection = connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL);
@@ -139,7 +134,7 @@ public class ContactDao implements DAO {
 
 
     public Contact read(Long contactId) {
-        String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
+
 
         Contact contact = null;
 

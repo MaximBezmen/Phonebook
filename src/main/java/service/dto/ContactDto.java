@@ -1,17 +1,24 @@
 package service.dto;
 
-import entity.Address;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import service.json.LocalDateDeserializer;
+import service.json.LocalDateSerializer;
 import type.FamilyStatusType;
 import type.SexType;
 
 import java.time.LocalDate;
 
 public class ContactDto {
+
     private Long id;
     private String firstName;
     private String lastName;
     private String middleName;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthday;
+
     private SexType gender;
     private String citizenship;
     private FamilyStatusType familyStatus;
