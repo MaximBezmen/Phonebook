@@ -28,6 +28,7 @@ public class AddressMapper {
             return null;
         }
         Address address = new Address();
+        address.setId(dto.getId());
         address.setCountry(dto.getCountry());
         address.setCity(dto.getCity());
         address.setStreet(dto.getStreet());
