@@ -5,7 +5,6 @@ import database.dao.daoImpl.AddressDao;
 import database.dao.daoImpl.ContactDao;
 import service.ContactService;
 import service.CustomBodyRequest;
-import service.dto.AddressDto;
 import service.dto.ContactDto;
 import service.impl.ContactServiceImpl;
 import service.mapper.ContactMapper;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 @WebServlet("/")
 public class ContactController extends HttpServlet {
@@ -25,7 +23,7 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new ContactMapper());
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new ContactMapper(phoneNumberMapper));
     }
 
     @Override
