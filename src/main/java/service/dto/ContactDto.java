@@ -2,12 +2,14 @@ package service.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import entity.PhoneNumber;
 import service.json.LocalDateDeserializer;
 import service.json.LocalDateSerializer;
 import type.FamilyStatusType;
 import type.SexType;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ContactDto {
 
@@ -26,6 +28,15 @@ public class ContactDto {
     private String email;
     private String currentPlaceOfWork;
     private AddressDto address;
+    private List<PhoneNumberDto> phoneNumbers;
+
+    public List<PhoneNumberDto> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<PhoneNumberDto> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
 
     public Long getId() {
         return id;

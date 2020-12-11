@@ -5,6 +5,7 @@ import type.FamilyStatusType;
 import type.SexType;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Contact {
 
@@ -20,9 +21,18 @@ public class Contact {
     private String email;
     private String currentPlaceOfWork;
     private Address address;
+    private List<PhoneNumber> phoneNumbers;
 
     public Contact() {
 
+    }
+
+    public List<PhoneNumber> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     public Address getAddress() {
