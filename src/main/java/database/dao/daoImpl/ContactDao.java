@@ -3,9 +3,12 @@ package database.dao.daoImpl;
 import database.dao.DAO;
 import entity.Address;
 import entity.Contact;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import type.FamilyStatusType;
 import type.SexType;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -23,7 +26,7 @@ public class ContactDao implements DAO {
         this.dao = dao;
     }
 
-    public Long save(Contact entity) {
+    public Contact save(Contact entity){
 
         Long id = 0L;
 
@@ -60,8 +63,7 @@ public class ContactDao implements DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return id;
+        return null;
     }
 
 

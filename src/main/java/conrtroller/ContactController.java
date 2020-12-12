@@ -1,6 +1,7 @@
 package conrtroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import database.dao.DAO;
 import database.dao.daoImpl.AddressDao;
 import database.dao.daoImpl.ContactDao;
 import service.ContactService;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 @WebServlet("/")
 public class ContactController extends HttpServlet {
@@ -23,13 +26,22 @@ public class ContactController extends HttpServlet {
 
     public ContactController() {
         this.customBodyRequest = new CustomBodyRequest();
-        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new ContactMapper(phoneNumberMapper));
+        this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao()), new ContactMapper());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long contactId = Long.parseLong(req.getParameter("id"));
-        resp.getWriter().write(contactService.getContactById((contactId)));
+//        Long contactId = Long.parseLong(req.getParameter("id"));
+//        resp.getWriter().write(contactService.getContactById((contactId)));
+        ContactDao dao = new ContactDao(new AddressDao());
+        try {
+          Connection connection = dao.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement("");
+            preparedStatement.executeQuery();
+        }catch (Exception e){
+            System.out.println("bug");
+        }
+        int x = 2;
     }
 
     @Override
