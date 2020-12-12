@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public interface DAO {
 
-    default Connection connect() throws SQLException {
+    default Connection connect() {
         DataSource ds = null;
         try {
             InitialContext initContext = new InitialContext();
@@ -19,7 +19,10 @@ public interface DAO {
         } catch (Exception e) {
 
         }
-
-        return ds.getConnection();
+        try (Connection connection = ds.getConnection()) {
+            return connection;
+        }catch (Exception e){
+            return null;
+        }
     }
 }
