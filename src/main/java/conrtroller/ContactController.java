@@ -11,14 +11,12 @@ import service.dto.ContactDto;
 import service.impl.ContactServiceImpl;
 import service.mapper.ContactMapper;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/")
-public class ContactController extends HttpServlet {
+// mappingUrl("/contact")
+public class ContactController {
     private final ContactService contactService;
     private final ObjectMapper objectMapper;
 
@@ -27,14 +25,12 @@ public class ContactController extends HttpServlet {
         this.objectMapper = new ObjectMapper();
     }
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Long contactId = Long.valueOf(req.getParameter("id"));
         String response = contactService.getContactById(contactId);
         resp.getWriter().write(response);
     }
 
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String body = CustomBodyJson.getBody(req);
         ContactDto contactDto = objectMapper.readValue(body, ContactDto.class);
@@ -42,7 +38,6 @@ public class ContactController extends HttpServlet {
         resp.getWriter().write(response);
     }
 
-    @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String body = CustomBodyJson.getBody(req);
         objectMapper.registerModule(new JavaTimeModule());
@@ -51,7 +46,6 @@ public class ContactController extends HttpServlet {
         resp.getWriter().write(response);
     }
 
-    @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         Long id = Long.parseLong(req.getParameter("id"));
         contactService.deleteContact(id);
