@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ContactCommand implements FrontCommand {
+public class ContactCommand implements Command {
     @Override
     public void execute(String methode, HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (methode) {

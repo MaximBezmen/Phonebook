@@ -25,11 +25,11 @@ public class FrontController extends HttpServlet {
         String mappingUrl = request.getServletPath();
         String methode = request.getMethod();
 
-        Map<String, FrontCommand> frontCommandMap = new HashMap<>();
+        Map<String, Command> frontCommandMap = new HashMap<>();
         frontCommandMap.put("/contact", new ContactCommand());
 
-        FrontCommand frontCommand = frontCommandMap.get(mappingUrl);
-        frontCommand.execute(methode, request, response);
+        Command command = frontCommandMap.get(mappingUrl);
+        command.execute(methode, request, response);
     }
 
     public String getServletInfo() {
