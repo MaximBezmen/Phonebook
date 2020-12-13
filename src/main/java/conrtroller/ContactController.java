@@ -1,6 +1,7 @@
 package conrtroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import database.dao.daoImpl.AddressDao;
 import database.dao.daoImpl.ContactDao;
 import database.dao.daoImpl.PhoneNumberDao;
@@ -44,6 +45,7 @@ public class ContactController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String body = CustomBodyJson.getBody(req);
+        objectMapper.registerModule(new JavaTimeModule());
         ContactDto contactDto = objectMapper.readValue(body, ContactDto.class);
         String response = contactService.updateContact(contactDto);
         resp.getWriter().write(response);

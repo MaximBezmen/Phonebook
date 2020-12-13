@@ -11,8 +11,8 @@ import java.util.List;
 public class PhoneNumberDao implements DAO {
     final String INSERT_SQL = "INSERT INTO phone_number (code_of_country, operator_code, number, type, comment, contact_id)" +
             " VALUES (?,?,?,?,?,?)";
-    final String UPDATE_SQL = "UPDATE phone_number SET code_of_country=?, operator_code=?, number=?, type=?, comment=?" +
-            "contact_id=? WHERE id=?";
+    final String UPDATE_SQL = "UPDATE phone_number SET code_of_country=?, operator_code=?, number=?, type=?, comment=?," +
+            " contact_id=? WHERE id=?";
 
     final String DELETE_SQL = "DELETE FROM phone_number WHERE contact_id=?";
     final String SELECT_SQL = "SELECT * FROM phone_number WHERE id=?";
@@ -53,8 +53,8 @@ public class PhoneNumberDao implements DAO {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     entity.setId(resultSet.getLong(1));
-                    entity.setCodeOfCountry(resultSet.getInt("codeOfCountry"));
-                    entity.setOperatorCode(resultSet.getInt("operatorCode"));
+                    entity.setCodeOfCountry(resultSet.getInt("code_of_country"));
+                    entity.setOperatorCode(resultSet.getInt("operator_code"));
                     entity.setNumber(resultSet.getString("number"));
                     entity.setType(TypeNumber.valueOf((resultSet.getString("type"))));
                     entity.setComment(resultSet.getString("comment"));
@@ -89,7 +89,7 @@ public class PhoneNumberDao implements DAO {
         }
     }
 
-    public PhoneNumber update(PhoneNumber entity, Connection connection) {
+    public PhoneNumber update(PhoneNumber entity, Long contactId, Connection connection) {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setInt(1, entity.getCodeOfCountry());
@@ -97,9 +97,9 @@ public class PhoneNumberDao implements DAO {
             preparedStatement.setString(3, entity.getNumber());
             preparedStatement.setString(4, entity.getType().name());
             preparedStatement.setString(5, entity.getComment());
-            preparedStatement.setLong(6, entity.getId());
+            preparedStatement.setLong(6, contactId);
+            preparedStatement.setLong(7, entity.getId());
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             e.getMessage();
             try {
@@ -114,8 +114,8 @@ public class PhoneNumberDao implements DAO {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     entity.setId(resultSet.getLong(1));
-                    entity.setCodeOfCountry(resultSet.getInt("codeOfCountry"));
-                    entity.setOperatorCode(resultSet.getInt("operatorCode"));
+                    entity.setCodeOfCountry(resultSet.getInt("code_of_country"));
+                    entity.setOperatorCode(resultSet.getInt("operator_code"));
                     entity.setNumber(resultSet.getString("number"));
                     entity.setType(TypeNumber.valueOf((resultSet.getString("type"))));
                     entity.setComment(resultSet.getString("comment"));
@@ -146,8 +146,8 @@ public class PhoneNumberDao implements DAO {
                 if (resultSet.next()) {
                     entity = new PhoneNumber();
                     entity.setId(resultSet.getLong(1));
-                    entity.setCodeOfCountry(resultSet.getInt("codeOfCountry"));
-                    entity.setOperatorCode(resultSet.getInt("operatorCode"));
+                    entity.setCodeOfCountry(resultSet.getInt("code_of_country"));
+                    entity.setOperatorCode(resultSet.getInt("operator_code"));
                     entity.setNumber(resultSet.getString("number"));
                     entity.setType(TypeNumber.valueOf((resultSet.getString("type"))));
                     entity.setComment(resultSet.getString("comment"));
@@ -170,8 +170,8 @@ public class PhoneNumberDao implements DAO {
                 while (resultSet.next()) {
                     PhoneNumber entity = new PhoneNumber();
                     entity.setId(resultSet.getLong(1));
-                    entity.setCodeOfCountry(resultSet.getInt("codeOfCountry"));
-                    entity.setOperatorCode(resultSet.getInt("operatorCode"));
+                    entity.setCodeOfCountry(resultSet.getInt("code_of_country"));
+                    entity.setOperatorCode(resultSet.getInt("operator_code"));
                     entity.setNumber(resultSet.getString("number"));
                     entity.setType(TypeNumber.valueOf((resultSet.getString("type"))));
                     entity.setComment(resultSet.getString("comment"));

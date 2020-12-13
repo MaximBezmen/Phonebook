@@ -20,6 +20,7 @@ public class ContactDao implements DAO {
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     final String DELETE_SQL = "DELETE FROM contact WHERE id=?";
     final String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
+    final String SELECT_SIMPLE_SQL = "SELECT address_id FROM contact WHERE id=?";
 
     private final AddressDao addressDao;
     private final PhoneNumberDao phoneNumberDao;
@@ -105,12 +106,26 @@ public class ContactDao implements DAO {
     }
 
     public void delete(Long id) {
+        Long addressId = null;
         try (Connection connection = connect()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SIMPLE_SQL)) {
+                preparedStatement.setLong(1, id);
+                try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()){
+                        addressId = resultSet.getLong("address_id");
+                    }
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
                 phoneNumberDao.deleteByContactId(id, connection);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
+                addressDao.delete(addressId, connection);
                 connection.commit();
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
@@ -142,11 +157,12 @@ public class ContactDao implements DAO {
                 preparedStatement.setString(9, entity.getEmail());
                 preparedStatement.setString(10, entity.getCurrentPlaceOfWork());
                 addressEntity = addressDao.update(entity.getAddress(), connection);
-                preparedStatement.setLong(12, addressEntity.getId());
+                preparedStatement.setLong(11, addressEntity.getId());
+                preparedStatement.setLong(12, entity.getId());
                 preparedStatement.executeUpdate();
                 phoneNumbers = new ArrayList<>();
                 for (PhoneNumber phoneNumber : entity.getPhoneNumbers()) {
-                    phoneNumbers.add(phoneNumberDao.update(phoneNumber, connection));
+                    phoneNumbers.add(phoneNumberDao.update(phoneNumber, entity.getId(), connection));
                 }
                 entity.setPhoneNumbers(phoneNumbers);
                 connection.commit();
