@@ -2,6 +2,8 @@ package database.dao.daoImpl;
 
 import database.dao.DAO;
 import entity.PhoneNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import type.TypeNumber;
 
 import java.sql.*;
@@ -17,7 +19,7 @@ public class PhoneNumberDao implements DAO {
     final String DELETE_SQL = "DELETE FROM phone_number WHERE contact_id=?";
     final String SELECT_SQL = "SELECT * FROM phone_number WHERE id=?";
     final String SELECT_BY_CONTACT_ID_SQL = "SELECT * FROM phone_number WHERE contact_id=?";
-
+    final Logger logger = LoggerFactory.getLogger(PhoneNumberDao.class);
 
     public PhoneNumber save(PhoneNumber entity, Long contactId, Connection connection) {
         Long id = 0L;
@@ -36,15 +38,17 @@ public class PhoneNumberDao implements DAO {
                         id = resultSet.getLong(1);
                     }
                 } catch (SQLException e) {
+                    logger.error(e.getMessage());
                     connection.rollback();
-                    e.printStackTrace();
+
                 }
             }
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
 
@@ -61,15 +65,15 @@ public class PhoneNumberDao implements DAO {
                     entity.setContactId(resultSet.getLong("contact_id"));
                 }
             } catch (SQLException e) {
+                logger.error(e.getMessage());
                 connection.rollback();
-                e.getMessage();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(e.getMessage());
             }
         }
         return entity;
@@ -80,11 +84,11 @@ public class PhoneNumberDao implements DAO {
             preparedStatement.setLong(1, contactId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
     }
@@ -101,11 +105,11 @@ public class PhoneNumberDao implements DAO {
             preparedStatement.setLong(7, entity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
 
@@ -122,15 +126,15 @@ public class PhoneNumberDao implements DAO {
                     entity.setContactId(resultSet.getLong("contact_id"));
                 }
             } catch (SQLException e) {
+                logger.error(e.getMessage());
                 connection.rollback();
-                e.getMessage();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(e.getMessage());
             }
         }
         return entity;
@@ -154,10 +158,10 @@ public class PhoneNumberDao implements DAO {
                     entity.setContactId(resultSet.getLong("contact_id"));
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return entity;
     }
@@ -180,10 +184,10 @@ public class PhoneNumberDao implements DAO {
                 }
 
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
         }
         return phoneNumbers;
     }
