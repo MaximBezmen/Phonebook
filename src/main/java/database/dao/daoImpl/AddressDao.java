@@ -2,6 +2,8 @@ package database.dao.daoImpl;
 
 import database.dao.DAO;
 import entity.Address;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
@@ -10,6 +12,7 @@ public class AddressDao implements DAO {
     final String DELETE_SQL = "DELETE FROM address WHERE id=?";
     final String UPDATE_SQL = "UPDATE address SET country=?, city=?, street=?, house=?, flat=? WHERE id=?";
     final String SELECT_SQL = "SELECT * FROM address WHERE id=?";
+    public static final Logger logger = LoggerFactory.getLogger(AddressDao.class);
 
     public Address save(Address entity, Connection connection) {
 
@@ -28,15 +31,16 @@ public class AddressDao implements DAO {
                         id = resultSet.getLong(1);
                     }
                 } catch (SQLException e) {
+                    logger.error(e.getMessage());
                     connection.rollback();
-                    e.printStackTrace();
                 }
             }
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
 
@@ -52,15 +56,15 @@ public class AddressDao implements DAO {
                     entity.setFlat(Integer.parseInt(resultSet.getString("flat")));
                 }
             } catch (SQLException e) {
+                logger.error(e.getMessage());
                 connection.rollback();
-                e.getMessage();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
         return entity;
@@ -71,11 +75,11 @@ public class AddressDao implements DAO {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
     }
@@ -93,11 +97,11 @@ public class AddressDao implements DAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
 
@@ -114,15 +118,15 @@ public class AddressDao implements DAO {
                     entity.setFlat(Integer.parseInt(resultSet.getString("flat")));
                 }
             } catch (SQLException e) {
+                logger.error(e.getMessage());
                 connection.rollback();
-                e.getMessage();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException exception) {
-                exception.getMessage();
+                logger.error(exception.getMessage());
             }
         }
 
@@ -146,10 +150,10 @@ public class AddressDao implements DAO {
                     addressEntity.setFlat(Integer.parseInt(resultSet.getString("flat")));
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return addressEntity;

@@ -4,6 +4,8 @@ import database.dao.DAO;
 import entity.Address;
 import entity.Contact;
 import entity.PhoneNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import type.FamilyStatusType;
 import type.SexType;
 
@@ -21,6 +23,7 @@ public class ContactDao implements DAO {
     final String DELETE_SQL = "DELETE FROM contact WHERE id=?";
     final String SELECT_SQL = "SELECT * FROM contact WHERE id=?";
     final String SELECT_SIMPLE_SQL = "SELECT address_id FROM contact WHERE id=?";
+    final Logger logger = LoggerFactory.getLogger(ContactDao.class);
 
     private final AddressDao addressDao;
     private final PhoneNumberDao phoneNumberDao;
@@ -61,7 +64,7 @@ public class ContactDao implements DAO {
                             contactId = resultSet.getLong(1);
                         }
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage());
                     }
                 }
                 phoneNumbers = new ArrayList<>();
@@ -71,7 +74,7 @@ public class ContactDao implements DAO {
                 connection.commit();
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
                 connection.rollback();
             }
             try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_SQL)) {
@@ -94,13 +97,13 @@ public class ContactDao implements DAO {
                         entity.setPhoneNumbers(phoneNumbers);
                     }
                 } catch (SQLException e) {
-                    e.getMessage();
+                    logger.error(e.getMessage());
                 }
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
         }
         return entity;
     }
@@ -115,10 +118,10 @@ public class ContactDao implements DAO {
                         addressId = resultSet.getLong("address_id");
                     }
                 }catch (SQLException e){
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
@@ -129,11 +132,11 @@ public class ContactDao implements DAO {
                 connection.commit();
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
+                logger.error(e.getMessage());
                 connection.rollback();
-                e.printStackTrace();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
         }
     }
 
@@ -168,11 +171,11 @@ public class ContactDao implements DAO {
                 connection.commit();
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                e.getMessage();
                 try {
+                    logger.error(e.getMessage());
                     connection.rollback();
                 } catch (SQLException exception) {
-                    exception.printStackTrace();
+                    logger.error(exception.getMessage());
                 }
             }
 
@@ -193,13 +196,13 @@ public class ContactDao implements DAO {
                         entity.setCurrentPlaceOfWork(resultSet.getString("current_place_of_work"));
                     }
                 } catch (SQLException e) {
-                    e.getMessage();
+                    logger.error(e.getMessage());
                 }
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.getMessage();
+            logger.error(e.getMessage());
         }
         return entity;
     }
@@ -228,13 +231,13 @@ public class ContactDao implements DAO {
                         contact.setPhoneNumbers(phoneNumberDao.getAllPhoneNumberByContactId(contactId, connection));
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return contact;
     }
