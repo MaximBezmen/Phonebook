@@ -105,7 +105,6 @@ public class AddressDao implements DAO {
             }
         }
 
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setLong(1, entity.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

@@ -1,7 +1,6 @@
 package database.dao.daoImpl;
 
 import database.dao.DAO;
-import database.dao.DBCPDataSource;
 import entity.Address;
 import entity.Contact;
 import entity.PhoneNumber;
@@ -38,7 +37,7 @@ public class ContactDao implements DAO {
         Long contactId = 0L;
         Address addressEntity = null;
         List<PhoneNumber> phoneNumbers = null;
-        try (Connection connection = DBCPDataSource.connect()) {
+        try (Connection connection = connect()) {
             connection.setAutoCommit(false);
             Date birthday = Date.valueOf(entity.getBirthday());
 
@@ -111,7 +110,7 @@ public class ContactDao implements DAO {
 
     public void delete(Long id) {
         Long addressId = null;
-        try (Connection connection = DBCPDataSource.connect()) {
+        try (Connection connection = connect()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SIMPLE_SQL)) {
                 preparedStatement.setLong(1, id);
                 try(ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -146,7 +145,7 @@ public class ContactDao implements DAO {
         List<PhoneNumber> phoneNumbers = null;
         Address addressEntity = null;
         Date birthday = Date.valueOf(entity.getBirthday());
-        try (Connection connection = DBCPDataSource.connect()) {
+        try (Connection connection = connect()) {
 
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
@@ -180,7 +179,7 @@ public class ContactDao implements DAO {
                 }
             }
 
-            try (PreparedStatement preparedStatement = DBCPDataSource.connect().prepareStatement(SELECT_SQL)) {
+            try (PreparedStatement preparedStatement = connect().prepareStatement(SELECT_SQL)) {
                 preparedStatement.setLong(1, entity.getId());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
@@ -210,7 +209,7 @@ public class ContactDao implements DAO {
 
     public Contact read(Long contactId) {
         Contact contact = null;
-        try (Connection connection = DBCPDataSource.connect()) {
+        try (Connection connection = connect()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
                 preparedStatement.setLong(1, contactId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {

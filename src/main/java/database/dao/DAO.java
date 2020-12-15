@@ -1,45 +1,53 @@
 package database.dao;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.naming.InitialContext;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public interface DAO {
+    Logger logger = LoggerFactory.getLogger(DAO.class);
 
-    //    default Connection connect() {
-    //        DataSource ds = null;
-    //        try {
-    //            InitialContext initContext = new InitialContext();
-    //            ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres");
-    //            if (ds == null) {
-    //                System.out.print("Data source not found!");
-    //            }
-    //        } catch (Exception e) {
-    //
-    //        }
-    //        try (Connection connection = ds.getConnection()) {
-    //            return connection;
-    //        } catch (Exception e) {
-    //            return null;
-    //        }
-    //        // JDBC driver name and database URL
-    //        String JDBC_DRIVER = "org.postgresql.Driver";
-    //        String DB_URL = "jdbc:postgresql://localhost:5432/phonebook";
-    //
-    //        //  Database credentials
-    //        String USER = "postgres";
-    //        String PASS = "mamant38";
-    //
-    //        default Connection connect () throws SQLException {
-    //            try {
-    //                Class.forName(JDBC_DRIVER);
-    //            } catch (ClassNotFoundException e) {
-    //                e.printStackTrace();
-    //            }
-    //            return DriverManager.getConnection(DB_URL,USER, PASS);
-    //        }
+    default Connection connect() {
+        try {
+//            HikariConfig config = new HikariConfig();
+//            config.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+//            config.setUsername("postgres");
+//            config.setPassword("mamant38");
+//            config.addDataSourceProperty("databaseName", "phonebook");
+//            config.addDataSourceProperty("serverName", "127.0.0.1");
+
+            HikariConfig config = new HikariConfig("/hikaricp.properties");
+
+            HikariDataSource ds = new HikariDataSource(config);
+
+            Connection connection = ds.getConnection();
+            return connection;
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+
+        return null;
     }
+}
 
+
+//        // JDBC driver name and database URL
+//        String JDBC_DRIVER = "org.postgresql.Driver";
+//        String DB_URL = "jdbc:postgresql://localhost:5432/phonebook";
+//
+//        //  Database credentials
+//        String USER = "postgres";
+//        String PASS = "mamant38";
+//
+//        default Connection connect () throws SQLException {
+//            try {
+//                Class.forName(JDBC_DRIVER);
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            return DriverManager.getConnection(DB_URL,USER, PASS);
