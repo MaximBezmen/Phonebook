@@ -34,11 +34,11 @@ public class ContactDao implements DAO {
         this.phoneNumberDao = phoneNumberDao;
     }
 
-    public Contact save(Contact entity) throws SQLExceptionDao {
+    public Contact save(Contact entity, Connection con) throws SQLExceptionDao {
         Long contactId = 0L;
         Address addressEntity = null;
         List<PhoneNumber> phoneNumbers = null;
-        try (Connection connection = connect()) {
+        try (Connection connection = con) {
             connection.setAutoCommit(false);
             Date birthday = Date.valueOf(entity.getBirthday());
 
@@ -113,9 +113,9 @@ public class ContactDao implements DAO {
         return entity;
     }
 
-    public void delete(Long id) throws SQLExceptionDao {
+    public void delete(Long id, Connection conn) throws SQLExceptionDao {
         Long addressId = null;
-        try (Connection connection = connect()) {
+        try (Connection connection = conn) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SIMPLE_SQL)) {
                 preparedStatement.setLong(1, id);
                 try(ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -149,11 +149,11 @@ public class ContactDao implements DAO {
     }
 
 
-    public Contact update(Contact entity) throws SQLExceptionDao {
+    public Contact update(Contact entity, Connection conn) throws SQLExceptionDao {
         List<PhoneNumber> phoneNumbers = null;
         Address addressEntity = null;
         Date birthday = Date.valueOf(entity.getBirthday());
-        try (Connection connection = connect()) {
+        try (Connection connection = conn) {
 
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
@@ -221,9 +221,9 @@ public class ContactDao implements DAO {
         return entity;
     }
 
-    public Contact read(Long contactId) throws SQLExceptionDao {
+    public Contact read(Long contactId, Connection con) throws SQLExceptionDao {
         Contact contact = null;
-        try (Connection connection = connect()) {
+        try (Connection connection = con) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
                 preparedStatement.setLong(1, contactId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
