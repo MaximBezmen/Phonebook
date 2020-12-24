@@ -12,7 +12,7 @@ public class ContactSaveCommand extends AbstractCommand {
     public void process() throws ServletException, IOException {
         String body = CustomBodyJson.getBody(request);
         ContactDto contactDto = objectMapper.readValue(body, ContactDto.class);
-        String responseAnswer = contactService.saveContact(contactDto);
+        String responseAnswer = objectMapper.writeValueAsString(contactService.saveContact(contactDto));
         response.getWriter().write(responseAnswer);
     }
 }

@@ -13,7 +13,7 @@ public class ContactUpdateCommand extends AbstractCommand {
         String body = CustomBodyJson.getBody(request);
         objectMapper.registerModule(new JavaTimeModule());
         ContactDto contactDto = objectMapper.readValue(body, ContactDto.class);
-        String responseAnswer = contactService.updateContact(contactDto);
+        String responseAnswer = objectMapper.writeValueAsString(contactService.updateContact(contactDto));
         response.getWriter().write(responseAnswer);
     }
 }

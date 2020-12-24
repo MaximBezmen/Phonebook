@@ -4,6 +4,7 @@ import database.dao.DAO;
 import entity.Address;
 import entity.Contact;
 import entity.PhoneNumber;
+import exception.SQLExceptionDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import type.FamilyStatusType;
@@ -33,7 +34,7 @@ public class ContactDao implements DAO {
         this.phoneNumberDao = phoneNumberDao;
     }
 
-    public Contact save(Contact entity) {
+    public Contact save(Contact entity) throws SQLExceptionDao {
         Long contactId = 0L;
         Address addressEntity = null;
         List<PhoneNumber> phoneNumbers = null;
@@ -76,6 +77,7 @@ public class ContactDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save contact.");
             }
             try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_SQL)) {
                 prepareStatement.setLong(1, contactId);
@@ -98,17 +100,20 @@ public class ContactDao implements DAO {
                     }
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
+                    throw new SQLExceptionDao("Exception in save contact.");
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in save contact.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in save contact.");
         }
         return entity;
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLExceptionDao {
         Long addressId = null;
         try (Connection connection = connect()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SIMPLE_SQL)) {
@@ -119,6 +124,7 @@ public class ContactDao implements DAO {
                     }
                 }catch (SQLException e){
                     logger.error(e.getMessage());
+                    throw new SQLExceptionDao("Exception in delete contact.");
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
@@ -134,14 +140,16 @@ public class ContactDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in delete contact.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in delete contact.");
         }
     }
 
 
-    public Contact update(Contact entity) {
+    public Contact update(Contact entity) throws SQLExceptionDao {
         List<PhoneNumber> phoneNumbers = null;
         Address addressEntity = null;
         Date birthday = Date.valueOf(entity.getBirthday());
@@ -174,8 +182,10 @@ public class ContactDao implements DAO {
                 try {
                     logger.error(e.getMessage());
                     connection.rollback();
+                    throw new SQLExceptionDao("Exception in update contact.");
                 } catch (SQLException exception) {
                     logger.error(exception.getMessage());
+                    throw new SQLExceptionDao("Exception in update contact.");
                 }
             }
 
@@ -197,17 +207,21 @@ public class ContactDao implements DAO {
                     }
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
+                    throw new SQLExceptionDao("Exception in update contact.");
+
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in update contact.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in update contact.");
         }
         return entity;
     }
 
-    public Contact read(Long contactId) {
+    public Contact read(Long contactId) throws SQLExceptionDao {
         Contact contact = null;
         try (Connection connection = connect()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
@@ -232,12 +246,15 @@ public class ContactDao implements DAO {
                     }
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
+                    throw new SQLExceptionDao("Exception in read contact.");
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in read contact.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in read contact.");
         }
         return contact;
     }

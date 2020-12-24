@@ -2,6 +2,7 @@ package database.dao.daoImpl;
 
 import database.dao.DAO;
 import entity.PhoneNumber;
+import exception.SQLExceptionDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import type.TypeNumber;
@@ -21,7 +22,7 @@ public class PhoneNumberDao implements DAO {
     final String SELECT_BY_CONTACT_ID_SQL = "SELECT * FROM phone_number WHERE contact_id=?";
     final Logger logger = LoggerFactory.getLogger(PhoneNumberDao.class);
 
-    public PhoneNumber save(PhoneNumber entity, Long contactId, Connection connection) {
+    public PhoneNumber save(PhoneNumber entity, Long contactId, Connection connection) throws SQLExceptionDao {
         Long id = 0L;
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, entity.getCodeOfCountry());
@@ -40,15 +41,17 @@ public class PhoneNumberDao implements DAO {
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
                     connection.rollback();
-
+                    throw new SQLExceptionDao("Exception in save phoneNumber.");
                 }
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save phoneNumber.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in save phoneNumber.");
             }
         }
 
@@ -67,19 +70,23 @@ public class PhoneNumberDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save phoneNumber.");
+
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save phoneNumber.");
             } catch (SQLException exception) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in save phoneNumber.");
             }
         }
         return entity;
     }
 
-    public void deleteByContactId(Long contactId, Connection connection) {
+    public void deleteByContactId(Long contactId, Connection connection) throws SQLExceptionDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1, contactId);
             preparedStatement.executeUpdate();
@@ -87,13 +94,16 @@ public class PhoneNumberDao implements DAO {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in deleteByContactId phoneNumber.");
+
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in deleteByContactId phoneNumber.");
             }
         }
     }
 
-    public PhoneNumber update(PhoneNumber entity, Long contactId, Connection connection) {
+    public PhoneNumber update(PhoneNumber entity, Long contactId, Connection connection) throws SQLExceptionDao{
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setInt(1, entity.getCodeOfCountry());
@@ -108,8 +118,10 @@ public class PhoneNumberDao implements DAO {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update phoneNumber.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in update phoneNumber.");
             }
         }
 
@@ -128,19 +140,23 @@ public class PhoneNumberDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update phoneNumber.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update phoneNumber.");
             } catch (SQLException exception) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in update phoneNumber.");
             }
         }
         return entity;
+
     }
 
-    public PhoneNumber read(Long phoneNumberId, Connection connection) {
+    public PhoneNumber read(Long phoneNumberId, Connection connection) throws SQLExceptionDao {
 
         PhoneNumber entity = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
@@ -159,14 +175,17 @@ public class PhoneNumberDao implements DAO {
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in read phoneNumber.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in read phoneNumber.");
+
         }
         return entity;
     }
 
-    public List<PhoneNumber> getAllPhoneNumberByContactId(Long contactId, Connection connection) {
+    public List<PhoneNumber> getAllPhoneNumberByContactId(Long contactId, Connection connection) throws SQLExceptionDao{
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_CONTACT_ID_SQL)) {
             preparedStatement.setLong(1, contactId);
@@ -185,9 +204,12 @@ public class PhoneNumberDao implements DAO {
 
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in getAllPhoneNumberByContactId phoneNumber.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in getAllPhoneNumberByContactId phoneNumber.");
+
         }
         return phoneNumbers;
     }

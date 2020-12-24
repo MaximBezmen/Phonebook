@@ -2,6 +2,7 @@ package database.dao.daoImpl;
 
 import database.dao.DAO;
 import entity.Address;
+import exception.SQLExceptionDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ public class AddressDao implements DAO {
     final String SELECT_SQL = "SELECT * FROM address WHERE id=?";
     public static final Logger logger = LoggerFactory.getLogger(AddressDao.class);
 
-    public Address save(Address entity, Connection connection) {
+    public Address save(Address entity, Connection connection) throws SQLExceptionDao {
 
         Long id = 0L;
 
@@ -33,14 +34,18 @@ public class AddressDao implements DAO {
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
                     connection.rollback();
+                    throw new SQLExceptionDao("Exception in save address.");
+
                 }
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save address.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in save address.");
             }
         }
 
@@ -58,19 +63,22 @@ public class AddressDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save address.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in save address.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in save address.");
             }
         }
         return entity;
     }
 
-    public void delete(Long id, Connection connection) {
+    public void delete(Long id, Connection connection) throws SQLExceptionDao{
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
@@ -78,14 +86,16 @@ public class AddressDao implements DAO {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in delete address.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in delete address.");
             }
         }
     }
 
 
-    public Address update(Address entity, Connection connection) {
+    public Address update(Address entity, Connection connection) throws SQLExceptionDao {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, entity.getCountry());
@@ -100,8 +110,10 @@ public class AddressDao implements DAO {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update address.");
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in update address.");
             }
         }
 
@@ -119,20 +131,25 @@ public class AddressDao implements DAO {
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update address.");
+
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
             try {
                 connection.rollback();
+                throw new SQLExceptionDao("Exception in update address.");
+
             } catch (SQLException exception) {
                 logger.error(exception.getMessage());
+                throw new SQLExceptionDao("Exception in update address.");
             }
         }
 
         return entity;
     }
 
-    public Address read(Long addressId, Connection connection) {
+    public Address read(Long addressId, Connection connection) throws SQLExceptionDao {
 
         Address addressEntity = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
@@ -150,9 +167,11 @@ public class AddressDao implements DAO {
                 }
             } catch (SQLException e) {
                 logger.error(e.getMessage());
+                throw new SQLExceptionDao("Exception in read address.");
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            throw new SQLExceptionDao("Exception in read address.");
         }
 
         return addressEntity;

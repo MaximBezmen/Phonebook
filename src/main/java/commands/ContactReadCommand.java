@@ -8,7 +8,7 @@ public class ContactReadCommand extends AbstractCommand {
     @Override
     public void process() throws ServletException, IOException {
         Long contactId = Long.valueOf(request.getParameter("id"));
-        String responseAnswer = contactService.getContactById(contactId);
+        String responseAnswer = objectMapper.writeValueAsString(contactService.getContactById(contactId));
         response.getWriter().write(responseAnswer);
     }
 
