@@ -51,15 +51,19 @@ public class FrontController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         mapping = new HashMap<>();
-        mapping.put(new UrlMapping("GET", "/Phonebook_war/contacts/"),new ContactReadCommand());
-        mapping.put(new UrlMapping("POST", "/Phonebook_war/contacts"),new ContactSaveCommand());
-        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts/"),new ContactDeleteCommand());
-        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts/"),new ContactUpdateCommand());
+        mapping.put(new UrlMapping("GET", "/Phonebook_war/contacts/"), new ContactReadCommand());
+        mapping.put(new UrlMapping("POST", "/Phonebook_war/contacts"), new ContactSaveCommand());
+        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts/"), new ContactDeleteCommand());
+        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts/"), new ContactUpdateCommand());
     }
 
     protected AbstractCommand processRequest(HttpServletRequest request) {
-        UrlMapping urlMapping = new UrlMapping(request.getMethod(),request.getRequestURI());
-        return mapping.get(urlMapping);
+        UrlMapping urlMapping = new UrlMapping(request.getMethod(), request.getRequestURI());
+        AbstractCommand command = mapping.get(urlMapping);
+        if (command == null) {
+            return new UnknownCommand();
+        }
+        return command;
     }
 
 }
