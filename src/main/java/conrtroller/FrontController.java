@@ -16,36 +16,35 @@ import java.util.Map;
 
 @WebServlet("/")
 public class FrontController extends HttpServlet {
-    Logger logger = LoggerFactory.getLogger(FrontController.class);
     Map<UrlMapping, AbstractCommand> mapping;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AbstractCommand command = processRequest(request);
-        command.init(getServletContext(), request, response);
-        command.process();
+        command.init();
+        command.process(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String s = CustomBodyJson.getBody(request);
+        //String s = CustomBodyJson.getBody(request);
         AbstractCommand command = processRequest(request);
-        command.init(getServletContext(), request, response);
-        command.process();
+        command.init();
+        command.process(request, response);
     }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AbstractCommand command = processRequest(request);
-        command.init(getServletContext(), request, response);
-        command.process();
+        command.init();
+        command.process(request, response);
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AbstractCommand command = processRequest(request);
-        command.init(getServletContext(), request, response);
-        command.process();
+        command.init();
+        command.process(request, response);
     }
 
     @Override

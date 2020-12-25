@@ -1,6 +1,5 @@
 package service.impl;
 
-import database.dao.DAO;
 import database.dao.daoImpl.ContactDao;
 import entity.Contact;
 import exception.SQLExceptionDao;
@@ -50,7 +49,7 @@ public class ContactServiceImpl implements ContactService {
         } catch (SQLExceptionDao e) {
             e.printStackTrace();
         }
-       ;
+        ;
         return contactMapper.toDto(contactEntity);
     }
 
