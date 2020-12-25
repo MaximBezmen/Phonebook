@@ -1,9 +1,6 @@
 package conrtroller;
 
 import commands.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import service.CustomBodyJson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +24,6 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String s = CustomBodyJson.getBody(request);
         AbstractCommand command = processRequest(request);
         command.init();
         command.process(request, response);
