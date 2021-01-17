@@ -17,7 +17,6 @@ public abstract class AbstractCommand {
     protected ContactService contactService;
     protected ObjectMapper objectMapper;
 
-
     public void init() {
         this.contactService = new ContactServiceImpl(new ContactDao(new AddressDao(), new PhoneNumberDao()), new ContactMapper());
         this.objectMapper = new ObjectMapper();
