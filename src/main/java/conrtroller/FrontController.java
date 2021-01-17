@@ -1,7 +1,9 @@
 package conrtroller;
 
+import commands.AbstractCommand;
+import commands.UnknownCommand;
+import commands.UrlMapping;
 import factory.FactoryCommand;
-import commands.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 @WebServlet("/")
 public class FrontController extends HttpServlet {
-    Map<UrlMapping, AbstractCommand> mapping;
+    Map<UrlMapping, String> mapping;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,15 +49,17 @@ public class FrontController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         mapping = new HashMap<>();
-        mapping.put(new UrlMapping("GET", "/Phonebook_war/contacts"), FactoryCommand.getCommand("GET"));
-        mapping.put(new UrlMapping("POST", "/Phonebook_war/contacts"), FactoryCommand.getCommand("POST"));
-        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts"), FactoryCommand.getCommand("DELETE"));
-        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts"), FactoryCommand.getCommand("PUT"));
+        mapping.put(new UrlMapping("GET", "/Phonebook_war/contacts"), "ContactReadCommand");
+        mapping.put(new UrlMapping("POST", "/Phonebook_war/contacts"), "ContactSaveCommand");
+        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts"), "ContactDeleteCommand");
+        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts"), "ContactUpdateCommand");
     }
 
     protected AbstractCommand processRequest(HttpServletRequest request) {
         UrlMapping urlMapping = new UrlMapping(request.getMethod(), request.getRequestURI());
-        AbstractCommand command = mapping.get(urlMapping);
+
+        AbstractCommand command = FactoryCommand.getCommand(mapping.get(urlMapping));
+
         if (command == null) {
             return new UnknownCommand();
         }

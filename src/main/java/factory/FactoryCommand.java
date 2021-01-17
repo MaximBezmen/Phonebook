@@ -7,16 +7,16 @@ public class FactoryCommand {
 
     }
     public static AbstractCommand getCommand(String command) {
-        if (command.equalsIgnoreCase("GET")) {
+        if (command.equalsIgnoreCase("ContactReadCommand")) {
             return new ContactReadCommand();
         }
-        if (command.equalsIgnoreCase("POST")) {
+        if (command.equalsIgnoreCase("ContactSaveCommand")) {
             return new ContactSaveCommand();
         }
-        if (command.equalsIgnoreCase("PUT")) {
+        if (command.equalsIgnoreCase("ContactUpdateCommand")) {
             return new ContactUpdateCommand();
         }
-        if (command.equalsIgnoreCase("DELETE")) {
+        if (command.equalsIgnoreCase("ContactDeleteCommand")) {
             return new ContactDeleteCommand();
         }
         return null;
