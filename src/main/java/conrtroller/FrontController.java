@@ -49,8 +49,8 @@ public class FrontController extends HttpServlet {
         mapping = new HashMap<>();
         mapping.put(new UrlMapping("GET", "/Phonebook_war/contacts"), FactoryCommand.getCommand("GET"));
         mapping.put(new UrlMapping("POST", "/Phonebook_war/contacts"), FactoryCommand.getCommand("POST"));
-        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts"), FactoryCommand.getCommand("POST"));
-        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts"), FactoryCommand.getCommand("POST"));
+        mapping.put(new UrlMapping("DELETE", "/Phonebook_war/contacts"), FactoryCommand.getCommand("DELETE"));
+        mapping.put(new UrlMapping("PUT", "/Phonebook_war/contacts"), FactoryCommand.getCommand("PUT"));
     }
 
     protected AbstractCommand processRequest(HttpServletRequest request) {
