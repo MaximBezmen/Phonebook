@@ -10,27 +10,22 @@ import java.sql.SQLException;
 
 public interface DAO {
     Logger logger = LoggerFactory.getLogger(DAO.class);
+    HikariConfig config = new HikariConfig("/hikaricp.properties");
+    HikariDataSource ds = new HikariDataSource(config);
 
     default Connection connect() {
         try {
-//            HikariConfig config = new HikariConfig();
 //            config.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
 //            config.setUsername("postgres");
 //            config.setPassword("mamant38");
 //            config.addDataSourceProperty("databaseName", "phonebook");
 //            config.addDataSourceProperty("serverName", "127.0.0.1");
-
-            HikariConfig config = new HikariConfig("/hikaricp.properties");
-
-            HikariDataSource ds = new HikariDataSource(config);
-
             Connection connection = ds.getConnection();
             return connection;
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
-
         return null;
     }
 }
