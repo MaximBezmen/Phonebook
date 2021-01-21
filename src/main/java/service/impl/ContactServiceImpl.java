@@ -7,6 +7,9 @@ import service.ContactService;
 import service.dto.ContactDto;
 import service.mapper.ContactMapper;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 
 public class ContactServiceImpl implements ContactService {
     private final ContactDao contactDao;
@@ -21,8 +24,10 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto saveContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
         try {
-            contactEntity = contactDao.save(contactEntity, contactDao.connect());
-        } catch (SQLExceptionDao e) {
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.save(contactEntity, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
         return contactMapper.toDto(contactEntity);
@@ -32,8 +37,10 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto getContactById(Long contactId) {
         Contact contactEntity = null;
         try {
-            contactEntity = contactDao.read(contactId, contactDao.connect());
-        } catch (SQLExceptionDao e) {
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.read(contactId, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
 
@@ -45,19 +52,22 @@ public class ContactServiceImpl implements ContactService {
         Contact contactEntity = contactMapper.toEntity(contactDto);
 
         try {
-            contactEntity = contactDao.update(contactEntity, contactDao.connect());
-        } catch (SQLExceptionDao e) {
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.update(contactEntity, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
-        ;
         return contactMapper.toDto(contactEntity);
     }
 
     @Override
     public void deleteContact(Long id) {
         try {
-            contactDao.delete(id, contactDao.connect());
-        } catch (SQLExceptionDao e) {
+            Connection connection = contactDao.connect();
+            contactDao.delete(id, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
     }
