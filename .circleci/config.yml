@@ -6,5 +6,4 @@ jobs:
       - image: circleci/openjdk:14-jdk-buster
     steps:
       - checkout
-      - run:
-        command: mvn-clean install
+      - run: mvn-clean install
