@@ -8,5 +8,5 @@ orbs:
   maven: circleci/maven@3.8.0
     steps:
       - checkout
-
-      - run: mvn-clean install
+      - run:
+        command: mvn-clean install
