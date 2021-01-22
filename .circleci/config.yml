@@ -6,4 +6,6 @@ jobs:
       - image: circleci/openjdk:14-jdk-buster
     steps:
       - checkout
+      - run: mvn -N io.takari:maven:wrapper
       - run: mvnw-package
+
