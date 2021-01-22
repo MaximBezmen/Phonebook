@@ -4,6 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:14-jdk-buster
+      - image: circleci/maven
     steps:
       - checkout
       - run: ./mvnm package
