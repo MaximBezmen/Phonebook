@@ -9,6 +9,15 @@ public class PhoneNumber {
     private String number;
     private TypeNumber type;
     private String comment;
+    private Long contactId;
+
+    public Long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
+    }
 
     public Long getId() {
         return id;

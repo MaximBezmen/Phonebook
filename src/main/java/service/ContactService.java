@@ -5,11 +5,11 @@ import service.dto.ContactDto;
 
 public interface ContactService {
 
-    String saveContact(ContactDto dto);
+    ContactDto saveContact(ContactDto dto);
 
-    String getContactById(Long contactId);
+    ContactDto getContactById(Long contactId);
 
-    String updateContact(ContactDto dto);
+    ContactDto updateContact(ContactDto dto);
 
     void deleteContact(Long id);
 }

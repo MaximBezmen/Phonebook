@@ -1,65 +1,74 @@
 package service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import database.dao.daoImpl.ContactDao;
 import entity.Contact;
+import exception.SQLExceptionDao;
 import service.ContactService;
 import service.dto.ContactDto;
 import service.mapper.ContactMapper;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class ContactServiceImpl implements ContactService {
     private final ContactDao contactDao;
     private final ContactMapper contactMapper;
-    private final ObjectMapper objectMapper;
 
     public ContactServiceImpl(ContactDao contactDao, ContactMapper contactMapper) {
         this.contactDao = contactDao;
         this.contactMapper = contactMapper;
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public String saveContact(ContactDto contactDto) {
+    public ContactDto saveContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
-        contactEntity = contactDao.save(contactEntity);
-        String jsonContact = null;
         try {
-            jsonContact = objectMapper.writeValueAsString(contactEntity);
-        } catch (JsonProcessingException e) {
-            System.err.print("Method saveContact: " + e.getMessage());
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.save(contactEntity, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
+            e.printStackTrace();
         }
-        return jsonContact;
+        return contactMapper.toDto(contactEntity);
     }
 
     @Override
-    public String getContactById(Long contactId) {
-        Contact contactEntity = contactDao.read(contactId);
-        String jsonContact = null;
+    public ContactDto getContactById(Long contactId) {
+        Contact contactEntity = null;
         try {
-            jsonContact = objectMapper.writeValueAsString(contactEntity);
-        } catch (JsonProcessingException e) {
-            System.err.print("Method saveContact: " + e.getMessage());
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.read(contactId, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
+            e.printStackTrace();
         }
-        return jsonContact;
+
+        return contactMapper.toDto(contactEntity);
     }
 
     @Override
-    public String updateContact(ContactDto contactDto) {
+    public ContactDto updateContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
-        contactEntity = contactDao.update(contactEntity);
-        String jsonContact = null;
+
         try {
-            jsonContact = objectMapper.writeValueAsString(contactEntity);
-        } catch (JsonProcessingException e) {
-            System.err.print("Method saveContact: " + e.getMessage());
+            Connection connection = contactDao.connect();
+            contactEntity = contactDao.update(contactEntity, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
+            e.printStackTrace();
         }
-        return jsonContact;
+        return contactMapper.toDto(contactEntity);
     }
 
     @Override
     public void deleteContact(Long id) {
-        contactDao.delete(id);
+        try {
+            Connection connection = contactDao.connect();
+            contactDao.delete(id, connection);
+            connection.close();
+        } catch (SQLExceptionDao | SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

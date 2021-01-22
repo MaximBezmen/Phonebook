@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class LocalDateDeserializer extends StdDeserializer<LocalDate> {
-
+    private static final long serialVersionUID = 1L;
     protected LocalDateDeserializer() {
         super(LocalDate.class);
     }

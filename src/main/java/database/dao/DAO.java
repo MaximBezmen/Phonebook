@@ -1,26 +1,48 @@
 package database.dao;
 
-import entity.Contact;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public interface DAO {
-    // JDBC driver name and database URL
-   String JDBC_DRIVER = "org.postgresql.Driver";
-   String DB_URL = "jdbc:postgresql://localhost:5432/phonebook";
+    Logger logger = LoggerFactory.getLogger(DAO.class);
+    HikariConfig config = new HikariConfig("/hikaricp.properties");
+    HikariDataSource ds = new HikariDataSource(config);
 
-    //  Database credentials
-    String USER = "postgres";
-    String PASS = "mamant38";
-
-    default Connection connect () throws SQLException {
+    default Connection connect() {
         try {
-            Class.forName(JDBC_DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+//            config.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+//            config.setUsername("postgres");
+//            config.setPassword("mamant38");
+//            config.addDataSourceProperty("databaseName", "phonebook");
+//            config.addDataSourceProperty("serverName", "127.0.0.1");
+            Connection connection = ds.getConnection();
+            return connection;
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
-        return DriverManager.getConnection(DB_URL,USER, PASS);
+        return null;
     }
 }
+
+
+//        // JDBC driver name and database URL
+//        String JDBC_DRIVER = "org.postgresql.Driver";
+//        String DB_URL = "jdbc:postgresql://localhost:5432/phonebook";
+//
+//        //  Database credentials
+//        String USER = "postgres";
+//        String PASS = "mamant38";
+//
+//        default Connection connect () throws SQLException {
+//            try {
+//                Class.forName(JDBC_DRIVER);
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            return DriverManager.getConnection(DB_URL,USER, PASS);

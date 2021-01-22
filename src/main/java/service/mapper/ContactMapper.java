@@ -38,6 +38,7 @@ public class ContactMapper {
             return null;
         }
         Contact contact = new Contact();
+        contact.setId(dto.getId());
         contact.setFirstName(dto.getFirstName());
         contact.setLastName(dto.getLastName());
         contact.setMiddleName(dto.getMiddleName());
