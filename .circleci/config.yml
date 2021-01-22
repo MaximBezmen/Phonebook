@@ -4,7 +4,9 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:14-jdk-buster
-      - image: circleci/maven@3.8.0
+orbs:
+  maven: circleci/maven@3.8.0
     steps:
       - checkout
-      - run: ./mvnm package
+
+      - run: mvn-clean install
