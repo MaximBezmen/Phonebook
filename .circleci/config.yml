@@ -4,8 +4,6 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:14-jdk-buster
-orbs:
-  maven: circleci/maven@3.8.0
     steps:
       - checkout
       - run:
