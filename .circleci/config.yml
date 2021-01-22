@@ -7,5 +7,5 @@ jobs:
     steps:
       - checkout
       - run: mvn -N io.takari:maven:wrapper
-      - run: mvnw-package
+      - run: mvn-package
 
