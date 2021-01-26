@@ -1,11 +1,12 @@
-version: 2.1
+version: 2.0
 
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:14-jdk-buster
+      - image: circleci/openjdk:stretch
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: mvn -N io.takari:maven:wrapper
-
-
+      - run: ./mvnw package
