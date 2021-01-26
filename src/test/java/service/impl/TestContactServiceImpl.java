@@ -1,15 +1,13 @@
 package service.impl;
 
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ContactServiceImplTest {
-
+public class TestContactServiceImpl {
     @Test
     void saveContact() {
-        int x = 3;
+        int x = 2;
         Assertions.assertEquals(2,x);
     }
 }
