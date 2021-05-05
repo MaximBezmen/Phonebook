@@ -23,10 +23,8 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDto saveContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
-        try {
-            Connection connection = contactDao.connect();
+        try(Connection connection = contactDao.connect()) {
             contactEntity = contactDao.save(contactEntity, connection);
-            connection.close();
         } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
@@ -36,10 +34,8 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDto getContactById(Long contactId) {
         Contact contactEntity = null;
-        try {
-            Connection connection = contactDao.connect();
+        try(Connection connection = contactDao.connect()) {
             contactEntity = contactDao.read(contactId, connection);
-            connection.close();
         } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
@@ -51,10 +47,8 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto updateContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
 
-        try {
-            Connection connection = contactDao.connect();
+        try(Connection connection = contactDao.connect();) {
             contactEntity = contactDao.update(contactEntity, connection);
-            connection.close();
         } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
@@ -63,10 +57,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void deleteContact(Long id) {
-        try {
-            Connection connection = contactDao.connect();
+        try(Connection connection = contactDao.connect()) {
             contactDao.delete(id, connection);
-            connection.close();
         } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
         }
