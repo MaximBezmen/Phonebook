@@ -47,7 +47,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto updateContact(ContactDto contactDto) {
         Contact contactEntity = contactMapper.toEntity(contactDto);
 
-        try(Connection connection = contactDao.connect();) {
+        try(Connection connection = contactDao.connect()) {
             contactEntity = contactDao.update(contactEntity, connection);
         } catch (SQLExceptionDao | SQLException e) {
             e.printStackTrace();
